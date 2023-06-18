@@ -1,0 +1,15 @@
+C:\Users\lhavl\source\repos\AI.Net\AI.NetProject\AI.NetProject\bin\Debug\net6.0\AI.NetProject.exe
+C:\Users\lhavl\source\repos\AI.Net\AI.NetProject\AI.NetProject\bin\Debug\net6.0\AI.NetProject.deps.json
+C:\Users\lhavl\source\repos\AI.Net\AI.NetProject\AI.NetProject\bin\Debug\net6.0\AI.NetProject.runtimeconfig.json
+C:\Users\lhavl\source\repos\AI.Net\AI.NetProject\AI.NetProject\bin\Debug\net6.0\AI.NetProject.dll
+C:\Users\lhavl\source\repos\AI.Net\AI.NetProject\AI.NetProject\bin\Debug\net6.0\AI.NetProject.pdb
+C:\Users\lhavl\source\repos\AI.Net\AI.NetProject\AI.NetProject\obj\Debug\net6.0\AI.NetProject.csproj.AssemblyReference.cache
+C:\Users\lhavl\source\repos\AI.Net\AI.NetProject\AI.NetProject\obj\Debug\net6.0\AI.NetProject.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\lhavl\source\repos\AI.Net\AI.NetProject\AI.NetProject\obj\Debug\net6.0\AI.NetProject.AssemblyInfoInputs.cache
+C:\Users\lhavl\source\repos\AI.Net\AI.NetProject\AI.NetProject\obj\Debug\net6.0\AI.NetProject.AssemblyInfo.cs
+C:\Users\lhavl\source\repos\AI.Net\AI.NetProject\AI.NetProject\obj\Debug\net6.0\AI.NetProject.csproj.CoreCompileInputs.cache
+C:\Users\lhavl\source\repos\AI.Net\AI.NetProject\AI.NetProject\obj\Debug\net6.0\AI.NetProject.dll
+C:\Users\lhavl\source\repos\AI.Net\AI.NetProject\AI.NetProject\obj\Debug\net6.0\refint\AI.NetProject.dll
+C:\Users\lhavl\source\repos\AI.Net\AI.NetProject\AI.NetProject\obj\Debug\net6.0\AI.NetProject.pdb
+C:\Users\lhavl\source\repos\AI.Net\AI.NetProject\AI.NetProject\obj\Debug\net6.0\AI.NetProject.genruntimeconfig.cache
+C:\Users\lhavl\source\repos\AI.Net\AI.NetProject\AI.NetProject\obj\Debug\net6.0\ref\AI.NetProject.dll
