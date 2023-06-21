@@ -1,4 +1,7 @@
 ﻿using AI.NetProject;
 
 var generateData = new GenerateData();
-generateData.Generate();
+
+generateData.GenerateNormalData();
+generateData.GenerateExtremeData();
+generateData.GenerateInvalidData();

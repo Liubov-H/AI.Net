@@ -1,12 +1,23 @@
-﻿using System.Text;
-
+﻿using System.Data;
+using System.Text;
+using AI.NetProject.Enteties;
 using Bogus;
 
 namespace AI.NetProject
 {
+	/// <summary>
+	/// Class for generating test data
+	/// </summary>
 	public class GenerateData
 	{
-		public void Generate()
+		private int titleIds = 1;
+		private int creditIds = 1;
+		private bool isFirstLines = true;
+
+		/// <summary>
+		/// Generating correct data with normal length
+		/// </summary>
+		internal void GenerateNormalData()
 		{
 			string[] ageSertifications = 
 			{
@@ -31,11 +42,10 @@ namespace AI.NetProject
 				"Music Composer"
 			};
 
-			int titleIds = 1;
 			var testTitles = new Faker<Title>()
-			.RuleFor(t => t.TitleId, f => titleIds++)
-			.RuleFor(t => t.TitleName, f => f.Random.String2(5, 50))
-			.RuleFor(t => t.Description, f => f.Random.Utf16String(200, 600))
+				.RuleFor(t => t.TitleId, f => titleIds++)
+				.RuleFor(t => t.TitleName, f => f.Random.String2(5, 50))
+				.RuleFor(t => t.Description, f => f.Random.Utf16String(200, 600))
 				.RuleFor(t => t.ReleaseYear, f => f.Random.Number(1800, (int)DateTime.Now.Year))
 				.RuleFor(t => t.AgeSertification, f => f.PickRandom(ageSertifications))
 				.RuleFor(t => t.Runtime, f => f.Random.Number(1, 500))
@@ -43,7 +53,6 @@ namespace AI.NetProject
 				.RuleFor(t => t.ProductionCountry, f => f.Random.String2(3).ToUpper())
 				.RuleFor(t => t.Seasons, f => f.Random.Number(1, 10));
 
-			int creditIds = 1;
 			var testCredits = new Faker<Credit>()
 				.RuleFor(c => c.CreditId, f => creditIds++)
 				.RuleFor(c => c.TitleId, f => f.Random.Number(1, titleIds))
@@ -51,12 +60,75 @@ namespace AI.NetProject
 				.RuleFor(c => c.CharacterName, f => f.Random.String2(3, 13))
 				.RuleFor(c => c.Role, f => f.PickRandom(roles));
 
-			var titles = testTitles.Generate(5);
-			var credits = testCredits.Generate(15);
+			var titles = testTitles.Generate(40);
+			var credits = testCredits.Generate(70);
 
 			WriteInFile(titles, credits);
 		}
 
+		/// <summary>
+		/// Generating different data, include long strings and large numbers
+		/// </summary>
+		internal void GenerateExtremeData()
+		{
+			var testTitles = new Faker<Title>()
+				.RuleFor(t => t.TitleId, f => titleIds++)
+				.RuleFor(t => t.TitleName, f => f.Random.Utf16String(0, 1000))
+				.RuleFor(t => t.Description, f => f.Random.Utf16String(0, 10000))
+				.RuleFor(t => t.ReleaseYear, f => f.Random.Number((int)DateTime.MinValue.Year, (int)DateTime.MaxValue.Year))
+				.RuleFor(t => t.AgeSertification, f => f.Random.Utf16String(0, 1000))
+				.RuleFor(t => t.Runtime, f => f.Random.Int(0))
+				.RuleFor(t => t.Genres, f => Enumerable.Range(1, f.Random.Number(0, 200)).Select(x => f.Random.Utf16String(0, 500)).ToList())
+				.RuleFor(t => t.ProductionCountry, f => f.Random.Utf16String(3).ToUpper())
+				.RuleFor(t => t.Seasons, f => f.Random.Int(0));
+
+			var testCredits = new Faker<Credit>()
+				.RuleFor(c => c.CreditId, f => creditIds++)
+				.RuleFor(c => c.TitleId, f => f.Random.Number(1, titleIds))
+				.RuleFor(c => c.RealName, f => f.Random.Utf16String(0, 1000) + " " + f.Random.Utf16String(0, 1000))
+				.RuleFor(c => c.CharacterName, f => f.Random.Utf16String(0, 1000))
+				.RuleFor(c => c.Role, f => f.Random.Utf16String(0, 1000));
+
+			var titles = testTitles.Generate(40);
+			var credits = testCredits.Generate(70);
+
+			WriteInFile(titles, credits);
+		}
+
+		/// <summary>
+		/// Generating invalid data, include dublicate PKs, foreign keys to nonexistent PKs, null values, etc.
+		/// </summary>
+		internal void GenerateInvalidData()
+		{
+			var testTitles = new Faker<Title>()
+				.RuleFor(t => t.TitleId, f => titleIds++.OrDefault(f, .5f, f.PickRandom(titleIds)))
+				.RuleFor(t => t.TitleName, f => f.Random.Utf16String(0, 50).OrNull(f, .5f))
+				.RuleFor(t => t.Description, f => f.Random.Utf16String(0, 600).OrNull(f, .5f))
+				.RuleFor(t => t.ReleaseYear, f => f.Random.Int(-100, 100))
+				.RuleFor(t => t.AgeSertification, f => f.Random.Utf16String(0, 10).OrNull(f, .5f))
+				.RuleFor(t => t.Runtime, f => f.Random.Int(-100, 100))
+				.RuleFor(t => t.Genres, f => Enumerable.Range(1, f.Random.Int(0, 100)).Select(x => f.Random.Utf16String(0, 100).OrNull(f, .5f)).ToList())
+				.RuleFor(t => t.ProductionCountry, f => f.Random.String2(3).OrNull(f, .5f))
+				.RuleFor(t => t.Seasons, f => f.Random.Int(-100, 100));
+
+			var testCredits = new Faker<Credit>()
+				.RuleFor(c => c.CreditId, f => creditIds++.OrDefault(f, .5f, f.PickRandom(creditIds)))
+				.RuleFor(c => c.TitleId, f => f.Random.Number(1, titleIds).OrDefault(f, .5f, titleIds + f.Random.Number(1, 50)))
+				.RuleFor(c => c.RealName, f => f.Random.Utf16String(0, 100).OrNull(f, .5f))
+				.RuleFor(c => c.CharacterName, f => f.Random.Utf16String(0, 100).OrNull(f, .5f))
+				.RuleFor(c => c.Role, f => f.Random.Utf16String(0, 100).OrNull(f, .5f));
+
+			var titles = testTitles.Generate(40);
+			var credits = testCredits.Generate(70);
+
+			WriteInFile(titles, credits);
+		}
+
+		/// <summary>
+		/// Writing test data to files
+		/// </summary>
+		/// <param name="titles">Titles data</param>
+		/// <param name="credits">Credits data</param>
 		public void WriteInFile(List<Title> titles, List<Credit> credits)
 		{
 			string titlesFilePath = @"C:\Users\lhavl\source\repos\AI.Net\TitlesOutput.csv";
@@ -65,10 +137,15 @@ namespace AI.NetProject
 			StringBuilder titlesOutput = new StringBuilder();
 			StringBuilder creditsOutput = new StringBuilder();
 
-			string[] titleHeadings = { "Title Id", "Title Name", "Description", "Release Year", "Age Sertification", "Runtime", "Genres", "Production Country", "Seasons" };
-			string[] creditHeadings = { "Credit Id", "Title Id", "Real Name", "Character Name", "Role" };
-			titlesOutput.AppendLine(string.Join(separator, titleHeadings));
-			creditsOutput.AppendLine(string.Join(separator, creditHeadings));
+			if(isFirstLines == true)
+			{
+				string[] titleHeadings = { "Title Id", "Title Name", "Description", "Release Year", "Age Sertification", "Runtime", "Genres", "Production Country", "Seasons" };
+				string[] creditHeadings = { "Credit Id", "Title Id", "Real Name", "Character Name", "Role" };
+				titlesOutput.AppendLine(string.Join(separator, titleHeadings));
+				creditsOutput.AppendLine(string.Join(separator, creditHeadings));
+
+				isFirstLines = false;
+			}
 
 			foreach (Title title in titles)
 			{
@@ -110,7 +187,6 @@ namespace AI.NetProject
 			catch (Exception ex)
 			{
 				Console.WriteLine("Data could not be written to the CSV file.");
-				Console.WriteLine(ex);
 				return;
 			}
 
